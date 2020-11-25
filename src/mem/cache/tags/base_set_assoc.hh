@@ -125,6 +125,14 @@ class BaseSetAssoc : public BaseTags
     CacheBlk* accessBlock(Addr addr, bool is_secure, Cycles &lat) override
     {
         CacheBlk *blk = findBlock(addr, is_secure);
+                int setIndex = indexingPolicy->extractSet1(addr);
+                if (setIndex < 100){
+                    DPRINTF(Cache,"Set Number is : %d\n",
+                                setIndex);
+                }
+                DPRINTF(Cache,"Replacement Policy is: %s\n",
+                                // replacementPolicy->name());
+                                typeid(replacementPolicy).name());
 
         // Access all tags in parallel, hence one in each way.  The data side
         // either accesses all blocks in parallel, or one block sequentially on

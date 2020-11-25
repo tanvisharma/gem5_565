@@ -155,6 +155,10 @@ class BaseIndexingPolicy : public SimObject
      */
     virtual Addr regenerateAddr(const Addr tag, const ReplaceableEntry* entry)
                                                                     const = 0;
+    /**
+    * Generate the setNumber from the given address.
+    */
+    virtual Addr extractSet1(const Addr addr) const;
 };
 
 #endif //__MEM_CACHE_INDEXING_POLICIES_BASE_HH__
