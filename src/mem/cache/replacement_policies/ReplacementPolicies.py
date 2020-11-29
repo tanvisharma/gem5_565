@@ -85,6 +85,15 @@ class BRRIPRP(BaseReplacementPolicy):
 class RRIPRP(BRRIPRP):
     btp = 100
 
+class DRRIPRP(BRRIPRP):
+    type = 'DRRIPRP'
+    cxx_class = 'DRRIPRP'
+    cxx_header = "mem/cache/replacement_policies/drrip_rp.hh"
+    srriprpSet = Param.String("1,2,3,4,5,6,7,8,9,10,",\
+        "set indices following srrip")
+    brriprpSet = Param.String("11,12,13,14,15,16,17,18,19,20,",\
+        "set indices following brrip")
+
 class NRURP(BRRIPRP):
     btp = 100
     num_bits = 1
