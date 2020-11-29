@@ -57,6 +57,7 @@ from common import MemConfig
 from common.FileSystemConfig import config_filesystem
 from common.Caches import *
 from common.cpu2000 import *
+# from newCacheConfig import *
 
 def get_processes(options):
     if options.benchmark == 'perlbench':
