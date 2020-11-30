@@ -129,7 +129,7 @@ def addNoISAOptions(parser):
     parser.add_option("--num-l3caches", type="int", default=1)
     parser.add_option("--l1d_size", type="string", default="32kB")
     parser.add_option("--l1i_size", type="string", default="32kB")
-    parser.add_option("--l2_size", type="string", default="256KB")
+    parser.add_option("--l2_size", type="string", default="256kB")
     parser.add_option("--l3_size", type="string", default="1MB")
     parser.add_option("--l1d_assoc", type="int", default=4)
     parser.add_option("--l1i_assoc", type="int", default=4)

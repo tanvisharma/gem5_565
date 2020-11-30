@@ -178,6 +178,9 @@ def config_mem(options, system):
                 print("For elastic trace, over-riding Simple Memory "
                     "latency to 1ns.")
 
+            mem_ctrl.tCL = '125ns'
+            mem_ctrl.tRCD = '125ns'
+
             mem_ctrls.append(mem_ctrl)
 
     subsystem.mem_ctrls = mem_ctrls
