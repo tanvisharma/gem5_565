@@ -89,11 +89,11 @@ class DRRIPRP(BRRIPRP):
     type = 'DRRIPRP'
     cxx_class = 'DRRIPRP'
     cxx_header = "mem/cache/replacement_policies/drrip_rp.hh"
-    srriprpSet = Param.String("1,2,3,4,5,6,7,8,9,10,",\
-        "set indices following srrip")
-    brriprpSet = Param.String("11,12,13,14,15,16,17,18,19,20,",\
-        "set indices following brrip")
-
+    num_sd_sets = Param.Unsigned(50, \
+        "number of sets dedicated to set duelling for each policy")
+    size = Param.Unsigned(Parent.size, "Cache size")
+    assoc = Param.Unsigned(Parent.assoc, "Assoc of parent cache")
+    blk_size = Param.Unsigned(64, "cache line size in Bytes")
 class NRURP(BRRIPRP):
     btp = 100
     num_bits = 1

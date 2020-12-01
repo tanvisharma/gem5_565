@@ -76,6 +76,7 @@ BaseSetAssoc::tagsInit()
 
         // Associate a replacement data entry to the block
         blk->replacementData = replacementPolicy->instantiateEntry();
+        blk->replacementData->setnumber = blk->getSet();
     }
 }
 

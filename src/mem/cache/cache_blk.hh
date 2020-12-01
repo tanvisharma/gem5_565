@@ -122,11 +122,15 @@ class CacheBlk : public ReplaceableEntry
      */
     Tick tickInserted;
 
+    //uint32_t getSet() const { ReplaceableEntry::getSet(); }
+
   protected:
     /**
      * Represents that the indicated thread context has a "lock" on
      * the block, in the LL/SC sense.
      */
+
+
     class Lock {
       public:
         ContextID contextId;     // locking context

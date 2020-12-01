@@ -81,7 +81,8 @@ gcc.cmd = [gcc.executable] + [data]+['-o',output] + ['-quiet'] \
 
 #410.bwaves
 bwaves = Process()
-bwaves.executable =  bench_dir+'/exe/bwaves_base.amd64-m64-gcc43-nn'
+bwaves_dir = '410.bwaves'
+bwaves.executable =  bench_dir+bwaves_dir+'/exe/bwaves_base.amd64-m64-gcc43-nn'
 #bwaves.data = bwaves.data
 bwaves.cmd = [bwaves.executable]
 
@@ -205,7 +206,7 @@ calculix.output = 'beampic.log'
 
 #456.hmmer
 hmmer=Process()
-hmmr_dir = '456.hmmr/'
+hmmr_dir = '456.hmmer'
 hmmer.executable = bench_dir+hmmr_dir+\
     '/exe/hmmer_base.amd64-m64-gcc43-nn'
 data=bench_dir+hmmr_dir+'/data/ref/input/nph3.hmm'
@@ -283,9 +284,9 @@ wrf.output = 'rsl.out.0000'
 
 #482.sphinx
 sphinx3=Process()
-sphinx3_dir = '482.sphinx/'
+sphinx3_dir = '482.sphinx3'
 sphinx3.executable =  bench_dir+sphinx3_dir+\
-    '/exe/sphinx_base.amd64-m64-gcc43-nn'
+    '/exe/sphinx_livepretend_base.amd64-m64-gcc43-nn'
 sphinx3.cmd = [sphinx3.executable]+['ctlfile', '.', 'args.an4']
 sphinx3.output = 'an4.out'
 
