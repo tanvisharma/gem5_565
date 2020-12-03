@@ -57,16 +57,19 @@ class DRRIPRP : public BRRIPRP
      * Based on SDC > some constant, decide if the rest of the sets
      * follow BRRIP or SRRIP.
      */
-    std::string srrip;
-    std::string brrip;
+    unsigned numSets;
+    unsigned num_sd_sets;
+    unsigned assoc;
+    unsigned blk_size;
+    unsigned size;
     
     
   public:
     /** Convenience typedef. */
     typedef DRRIPRPParams Params;
-    int SDC;
-    int srriprpSet[10];
-    int brriprpSet[10];
+    mutable int SDC;
+    int srriprpSet[50];
+    int brriprpSet[50];
 
     /**
      * Construct and initiliaze this replacement policy.
@@ -89,9 +92,10 @@ class DRRIPRP : public BRRIPRP
     void reset(const std::shared_ptr<ReplacementData>& replacement_data) const
                                                                      override;
 
-    void touch(const std::shared_ptr<ReplacementData>& replacement_data) ;
+    void touch(const std::shared_ptr<ReplacementData>& replacement_data) const
+                                                                     override;
 
-    
+
 
 };
 

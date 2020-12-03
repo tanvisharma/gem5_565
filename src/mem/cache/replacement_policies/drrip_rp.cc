@@ -34,42 +34,21 @@
 #include "params/DRRIPRP.hh"  
 
 DRRIPRP::DRRIPRP(Params *p)
-    : BRRIPRP(p), srrip(p->srriprpSet), brrip(p->brriprpSet)
+    : BRRIPRP(p), num_sd_sets(p->num_sd_sets), assoc(p->assoc),blk_size(p->blk_size), size(p->size)
 {
     SDC = 0;
-    std::string temp ="";
-    int len = srrip.size();
+    
+    numSets = size/(blk_size*assoc);
+    int disp = floor(size/(2*numSets));
     int j = 0;
-    for (int i=0; i < len; i++){
-        if (srrip[i] != ','){
-            temp += srrip[i];
-            continue;
-        }
-        if (srrip[i] == ','){
-            srriprpSet[j] = stoi(temp);
-            j++;
-            temp = "";
-        }
+    for (int i=0;i<num_sd_sets;i++){
+        srriprpSet[i] = j;
+
+        j += disp;
+        brriprpSet[i] = j;
+        j += disp;  
     }
-    temp ="";
-    len = brrip.size();
-    j = 0;
-    for (int i=0; i < len; i++){
-        if (brrip[i] != ','){
-            temp += brrip[i];
-            continue;
-        }
-        if (brrip[i] == ','){
-            brriprpSet[j] = stoi(temp);
-            j++;
-            temp = "";
-        }
-    }
-        
 }
-
-
-
 
 void
 DRRIPRP::reset(const std::shared_ptr<ReplacementData>& replacement_data) const
@@ -110,7 +89,7 @@ DRRIPRP::reset(const std::shared_ptr<ReplacementData>& replacement_data) const
 }
 
 void
-DRRIPRP::touch(const std::shared_ptr<ReplacementData>& replacement_data) 
+DRRIPRP::touch(const std::shared_ptr<ReplacementData>& replacement_data) const
 {
     int setNum = replacement_data->setnumber;
     std::shared_ptr<BRRIPReplData> casted_replacement_data =
