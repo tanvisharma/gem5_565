@@ -37,6 +37,7 @@ import optparse
 import sys
 import os
 import spec2k6
+import shutil
 
 import m5
 from m5.defines import buildEnv
@@ -78,6 +79,7 @@ def get_processes(options):
        process = spec2k6.zeusmp
     elif options.benchmark == 'gromacs':
        process = spec2k6.gromacs
+       shutil.copy(os.path.join(process.cwd,"gromacs.tpr"),os.getcwd())
     elif options.benchmark == 'cactusADM':
        process = spec2k6.cactusADM
     elif options.benchmark == 'leslie3d':
