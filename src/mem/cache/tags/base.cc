@@ -88,15 +88,19 @@ BaseTags::findBlock(Addr addr, bool is_secure) const
         CacheBlk* blk = static_cast<CacheBlk*>(location);
         if ((blk->tag == tag) && blk->isValid() &&
             (blk->isSecure() == is_secure)) {
+            //Update outcome if a hit
+            blk->replacementData->outcome = true;
             return blk;
         }
     }
+
+
 
     // Did not find block
     return nullptr;
 }
 
-void
+void 
 BaseTags::insertBlock(const PacketPtr pkt, CacheBlk *blk)
 {
     assert(!blk->isValid());
@@ -112,6 +116,12 @@ BaseTags::insertBlock(const PacketPtr pkt, CacheBlk *blk)
     // Insert block with tag, src master id and task id
     blk->insert(extractTag(pkt->getAddr()), pkt->isSecure(), master_id,
                 pkt->req->taskId());
+
+    //Update the signature and outcome of the block
+    blk->replacementData->signature = (pkt->getAddr()) >> 18; //14bit-signature assuming addr is 32-bit
+    // blk->signature = (pkt->getAddr()); //14bit-signature
+    blk->replacementData->outcome = false;
+
 
     // Check if cache warm up is done
     if (!warmedUp && stats.tagsInUse.value() >= warmupBound) {

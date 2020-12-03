@@ -125,14 +125,6 @@ class BaseSetAssoc : public BaseTags
     CacheBlk* accessBlock(Addr addr, bool is_secure, Cycles &lat) override
     {
         CacheBlk *blk = findBlock(addr, is_secure);
-                int setIndex = indexingPolicy->extractSet1(addr);
-                if (setIndex < 100){
-                    DPRINTF(Cache,"Set Number is : %d\n",
-                                setIndex);
-                }
-                DPRINTF(Cache,"Replacement Policy is: %s\n",
-                                // replacementPolicy->name());
-                                typeid(replacementPolicy).name());
 
         // Access all tags in parallel, hence one in each way.  The data side
         // either accesses all blocks in parallel, or one block sequentially on
@@ -199,10 +191,14 @@ class BaseSetAssoc : public BaseTags
     {
         // Insert block
         BaseTags::insertBlock(pkt, blk);
+        // DPRINTF(Cache, "Signature value is: %d\n", blk->signature);
+        DPRINTF(Cache, "Signature value is: %#x\n", blk->replacementData->signature);
+        DPRINTF(Cache, "Outcome is: %d\n", blk->replacementData->outcome);
+        // DPRINTF(Cache, "Address 0x%" PRIu64 "\n ", pkt->getAddr()); 
+        DPRINTF(Cache, "Address %#llx \n" , pkt->getAddr()); 
 
         // Increment tag counter
         stats.tagsInUse++;
-
         // Update replacement policy
         replacementPolicy->reset(blk->replacementData);
     }

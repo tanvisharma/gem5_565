@@ -94,6 +94,14 @@ class DRRIPRP(BRRIPRP):
     size = Param.Unsigned(Parent.size, "Cache size")
     assoc = Param.Unsigned(Parent.assoc, "Assoc of parent cache")
     blk_size = Param.Unsigned(64, "cache line size in Bytes")
+
+class SHIPRP(BRRIPRP):
+    type = 'SHIPRP'
+    cxx_class = 'SHIPRP'
+    cxx_header = "mem/cache/replacement_policies/ship_rp.hh"
+    counter_bits = Param.Int(3, "Number of bits for saturation counter for SHCT")
+    counter_size = Param.Int(16384, "Number of entries in the SHCT")
+
 class NRURP(BRRIPRP):
     btp = 100
     num_bits = 1

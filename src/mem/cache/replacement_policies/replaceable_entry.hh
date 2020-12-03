@@ -40,6 +40,8 @@
  */
 struct ReplacementData {
     uint32_t setnumber;
+    bool outcome;
+    uint64_t signature;
 };
 
 /**
