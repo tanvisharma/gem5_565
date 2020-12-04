@@ -89,11 +89,9 @@ class DRRIPRP(BRRIPRP):
     type = 'DRRIPRP'
     cxx_class = 'DRRIPRP'
     cxx_header = "mem/cache/replacement_policies/drrip_rp.hh"
-    num_sd_sets = Param.Unsigned(50, \
+    num_sd_sets = Param.Unsigned(32, \
         "number of sets dedicated to set duelling for each policy")
-    size = Param.Unsigned(Parent.size, "Cache size")
-    assoc = Param.Unsigned(Parent.assoc, "Assoc of parent cache")
-    blk_size = Param.Unsigned(64, "cache line size in Bytes")
+    count_bits = Param.Int(10, "number of bits for set duelling counter")
 
 class SHIPRP(BRRIPRP):
     type = 'SHIPRP'

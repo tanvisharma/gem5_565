@@ -34,20 +34,9 @@
 #include "params/DRRIPRP.hh"  
 
 DRRIPRP::DRRIPRP(Params *p)
-    : BRRIPRP(p), num_sd_sets(p->num_sd_sets), assoc(p->assoc),blk_size(p->blk_size), size(p->size)
+    : BRRIPRP(p), num_sd_sets(p->num_sd_sets),count_bits(p->count_bits)
 {
-    SDC = 0;
-    
-    numSets = size/(blk_size*assoc);
-    int disp = floor(size/(2*numSets));
-    int j = 0;
-    for (int i=0;i<num_sd_sets;i++){
-        srriprpSet[i] = j;
-
-        j += disp;
-        brriprpSet[i] = j;
-        j += disp;  
-    }
+    SDC = pow(2, p->count_bits-1);
 }
 
 void
@@ -61,19 +50,24 @@ DRRIPRP::reset(const std::shared_ptr<ReplacementData>& replacement_data) const
     // "distant re-reference" otherwise
     
     casted_replacement_data->rrpv.saturate();
-
+    uint32_t constituency = floor(setNum/num_sd_sets);
+    uint32_t offset = setNum % num_sd_sets; 
     
-    bool srripSetPresent = std::find(std::begin(srriprpSet), std::end(srriprpSet), setNum) != std::end(srriprpSet);
-    bool brripSetPresent = std::find(std::begin(brriprpSet), std::end(brriprpSet), setNum) != std::end(brriprpSet);
+    bool srripSetPresent = constituency == offset;
+    bool brripSetPresent = (constituency+1)*(num_sd_sets-1) == offset;
 
     if (brripSetPresent){
         if (random_mt.random<unsigned>(1, 100) <= btp){
             casted_replacement_data->rrpv--;
+            SDC++;
+            if (SDC > pow(2,count_bits)){SDC--;}
         }
     } else if(srripSetPresent){
         casted_replacement_data->rrpv--;
+        SDC--;
+        if (SDC < 0){SDC++;}
     } else {
-        if (SDC >= 0) { //SRRIP Has more hits
+        if (SDC > pow(2, count_bits-1)) { //SRRIP Has more hits
             casted_replacement_data->rrpv--;  
         }
         else {
@@ -88,31 +82,46 @@ DRRIPRP::reset(const std::shared_ptr<ReplacementData>& replacement_data) const
 
 }
 
-void
-DRRIPRP::touch(const std::shared_ptr<ReplacementData>& replacement_data) const
-{
-    int setNum = replacement_data->setnumber;
-    std::shared_ptr<BRRIPReplData> casted_replacement_data =
-        std::static_pointer_cast<BRRIPReplData>(replacement_data);
+// void
+// DRRIPRP::touch(const std::shared_ptr<ReplacementData>& replacement_data) const
+// {
+//     int setNum = replacement_data->setnumber;
+//     std::shared_ptr<BRRIPReplData> casted_replacement_data =
+//         std::static_pointer_cast<BRRIPReplData>(replacement_data);
 
-    // Update RRPV if not 0 yet
-    // Every hit in HP mode makes the entry the last to be evicted, while
-    // in FP mode a hit makes the entry less likely to be evicted
-    bool srripSetPresent = std::find(std::begin(srriprpSet), std::end(srriprpSet), setNum) != std::end(srriprpSet);
-    bool brripSetPresent = std::find(std::begin(brriprpSet), std::end(brriprpSet), setNum) != std::end(brriprpSet);
+//     // Update RRPV if not 0 yet
+//     // Every hit in HP mode makes the entry the last to be evicted, while
+//     // in FP mode a hit makes the entry less likely to be evicted
+//     uint32_t constituency = floor(setNum/num_sd_sets);
+//     uint32_t offset = setNum % num_sd_sets; 
+    
+//     bool srripSetPresent = constituency == offset;
+//     bool brripSetPresent = (constituency+1)*(num_sd_sets-1) == offset;
+//     // printf("constituency: %d offset: %d \n", constituency, offset);
+//     // printf("offset: %d \n", offset);
 
-    if (srripSetPresent){
-        SDC++;
-    }else if(brripSetPresent){
-        SDC--;
-    }
-    DPRINTF(CacheRepl, "SDCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC: %d \n", SDC);
-    if (hitPriority) {
-        casted_replacement_data->rrpv.reset();
-    } else {
-        casted_replacement_data->rrpv--;
-    }
-}
+//     if (srripSetPresent){
+//         SDC++;
+//         // printf("srrip: %d \n", SDC);
+//         if (SDC>pow(2,count_bits)){
+//             SDC = pow(2,count_bits);
+//         }
+//     }
+
+//     else if(brripSetPresent){
+//         SDC--;
+//         // printf("brrip: %d \n", SDC);
+//         if (SDC<0){
+//             SDC = 0;
+//         }
+//     }
+//     printf("SDC: %d \n", SDC);
+//     if (hitPriority) {
+//         casted_replacement_data->rrpv.reset();
+//     } else {
+//         casted_replacement_data->rrpv--;
+//     }
+// }
 
 
 

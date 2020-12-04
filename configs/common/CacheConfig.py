@@ -43,6 +43,7 @@
 from __future__ import print_function
 from __future__ import absolute_import
 
+import sys
 import m5
 from m5.objects import *
 from common.Caches import *
@@ -103,10 +104,19 @@ def config_cache(options, system):
                                    assoc=options.l2_assoc,
                                    clusivity = 'mostly_excl')
 
+        
         system.l3 = l3_cache_class(clk_domain=system.cpu_clk_domain,
                                     size=options.l3_size,
                                     assoc=options.l3_assoc,
                                     clusivity = 'mostly_incl')
+        if options.l3cache:
+            opt =  {'drrip': DRRIPRP,
+                    'lru':LRURP,
+                    'brrip':BRRIPRP,
+                    'srrip':RRIPRP,
+                    'ship':SHIPRP} 
+            setattr(system.l3,'replacement_policy',opt[options.l3_repl]())
+
 
         system.tol2bus = L2XBar(clk_domain = system.cpu_clk_domain)
         system.tol3bus = L3XBar(clk_domain = system.cpu_clk_domain)
