@@ -54,18 +54,21 @@ DRRIPRP::reset(const std::shared_ptr<ReplacementData>& replacement_data) const
     uint32_t offset = setNum % num_sd_sets; 
     
     bool srripSetPresent = constituency == offset;
-    bool brripSetPresent = (constituency+1)*(num_sd_sets-1) == offset;
+    bool brripSetPresent = (constituency+1)*(num_sd_sets-1) == setNum;
 
     if (brripSetPresent){
+        SDC++;
+        if (SDC > pow(2,count_bits)){SDC--;}
         if (random_mt.random<unsigned>(1, 100) <= btp){
             casted_replacement_data->rrpv--;
-            SDC++;
-            if (SDC > pow(2,count_bits)){SDC--;}
         }
     } else if(srripSetPresent){
         casted_replacement_data->rrpv--;
         SDC--;
         if (SDC < 0){SDC++;}
+        
+        
+
     } else {
         if (SDC > pow(2, count_bits-1)) { //SRRIP Has more hits
             casted_replacement_data->rrpv--;  
@@ -76,7 +79,7 @@ DRRIPRP::reset(const std::shared_ptr<ReplacementData>& replacement_data) const
             }
         }
     }
-
+    // printf("SDC: %d \n",SDC);
     // Mark entry as ready to be used
     casted_replacement_data->valid = true;
 
@@ -96,7 +99,7 @@ DRRIPRP::reset(const std::shared_ptr<ReplacementData>& replacement_data) const
 //     uint32_t offset = setNum % num_sd_sets; 
     
 //     bool srripSetPresent = constituency == offset;
-//     bool brripSetPresent = (constituency+1)*(num_sd_sets-1) == offset;
+//     bool brripSetPresent = (constituency+1)*(num_sd_sets-1) == setNum;
 //     // printf("constituency: %d offset: %d \n", constituency, offset);
 //     // printf("offset: %d \n", offset);
 
