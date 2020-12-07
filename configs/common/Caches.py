@@ -85,7 +85,7 @@ class L3Cache(Cache): #l3cache
     mshrs = 20
     tgts_per_mshr = 12
     write_buffers = 8
-    replacement_policy = LRURP()
+
 
 
 class IOCache(Cache):
