@@ -1,3 +1,23 @@
+Cache Replacement policies are critical to the performance of a computer system.
+Static Replacement policies like LRU (Least Recently Used) is a popular cache replacement policy
+which always assumes that the cache block has a near re-reference interval. As a result, workloads
+which have a distant re-reference interval perform badly under LRU. Such workloads usually either
+have a mixed access pattern or a working set size which is larger than a cache size. These kinds
+of workloads are very common in practice, hence it is essential to predict the re-reference interval
+of the newly brought cache block. In this report, we analyze two such replacement policies,
+(1) Dynamic Re-Reference Interval Prediction (DRRIP) and (2) Signature Hit Predictor (SHiP).
+DRRIP dynamically chooses between SRRIP (Static Re-Reference Interval Prediction) which is a scan
+resistant policy and BRRIP (Bimodal Re-Reference Interval Prediction) which is thrash resistant policy.
+DRRIP uses a technique named Set-Dueling and dynamically makes a decision to follow one of the two
+replacement policies. On the other hand, SHiP monitors the re-reference behaviour of cache lines using
+unique signatures and subsequently predicts if the incoming cache line has a distant or an intermediate
+re-reference interval. We implement SHiP-Mem which uses memory region signatures to learn the re-reference
+behaviours of cachelines associated with that signature. We analyse the effectiveness of the implemented
+replacement policies (DRRIP and SHiP-Mem) on SPEC 2006 workloads over the baseline LRU policy. 
+
+
+
+
 This is the gem5 simulator.
 
 The main website can be found at http://www.gem5.org
